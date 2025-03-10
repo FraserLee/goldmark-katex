@@ -43,3 +43,26 @@ func TestExtenderTestExtender(t *testing.T) {
 		})
 	}
 }
+
+// TestContextReuse verifies that a macro defined in one math block persists to later blocks.
+func TestContextReuse(t *testing.T) {
+	// Markdown with two math blocks:
+	// First block defines a macro \R.
+	// Second block uses \R.
+	md := []byte(`
+$$
+\def\t#1{\text{#1}}
+\def\f#1#2{\frac{#1}{#2}}
+$$
+
+$$
+\f{\t{Top text}}{\t{Bottom text}}
+$$
+
+Inline: $\R$.
+`)
+	var buf bytes.Buffer
+	if err := goldmark.New(goldmark.WithExtensions(&Extender{ ThrowOnError: true })).Convert(md, &buf); err != nil {
+		t.Fatalf("conversion failed: %v", err)
+	}
+}
