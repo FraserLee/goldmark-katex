@@ -51,8 +51,8 @@ func TestContextReuse(t *testing.T) {
 	// Second block uses \R.
 	md := []byte(`
 $$
-\def\t#1{\text{#1}}
-\def\f#1#2{\frac{#1}{#2}}
+\global\def\t#1{\text{#1}}
+\global\def\f#1#2{\frac{#1}{#2}}
 $$
 
 $$
