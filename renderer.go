@@ -21,6 +21,7 @@ type HTMLRenderer struct {
 func (r *HTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(KindInline, r.renderInline)
 	reg.Register(KindBlock, r.renderBlock)
+	reg.Register(ast.KindDocument, r.cleanupResources)
 }
 
 func (r *HTMLRenderer) renderInline(w util.BufWriter, source []byte, n ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -82,3 +83,13 @@ func (r *HTMLRenderer) renderBlock(w util.BufWriter, source []byte, n ast.Node, 
 
 	return ast.WalkContinue, nil
 }
+
+func (r *HTMLRenderer) cleanupResources(writer util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	if !entering {
+		jsMutex.Lock()
+		defer jsMutex.Unlock()
+		CloseJSRuntime()
+	}
+	return ast.WalkContinue, nil
+}
+

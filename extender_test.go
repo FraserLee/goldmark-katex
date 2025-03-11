@@ -44,11 +44,8 @@ func TestExtenderTestExtender(t *testing.T) {
 	}
 }
 
-// TestContextReuse verifies that a macro defined in one math block persists to later blocks.
+// verifies that a macro defined in one math block persists to later blocks.
 func TestContextReuse(t *testing.T) {
-	// Markdown with two math blocks:
-	// First block defines a macro \R.
-	// Second block uses \R.
 	md := []byte(`
 $$
 \global\def\t#1{\text{#1}}
